@@ -1,4 +1,5 @@
 library(shiny)
+library(plotly)
  
     
 shinyServer(function(input, output, session) {
@@ -18,7 +19,17 @@ shinyServer(function(input, output, session) {
         group_by(model_year, fuel_type_code) %>%
         count(fuel_type_code)
     })
-    
+        
+        g <- list(
+            scope = 'usa',
+            projection = list(type = 'albers usa'),
+            showland = TRUE,
+            landcolor = toRGB("gray95"),
+            subunitcolor = toRGB("gray85"),
+            countrycolor = toRGB("gray85"),
+            countrywidth = 0.5,
+            subunitwidth = 0.5
+        )
         output$map = renderPlotly({
             plot_geo(map_re(), lat = ~latitude, lon = ~longitude) %>%
                 add_markers(
